@@ -6,7 +6,7 @@ import z from "zod";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+//import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
@@ -24,6 +24,7 @@ import {
 import bcrypt from "bcryptjs"
 import { PlanAction } from "./planAction"
 import type { Plan } from "./planAction"
+import { useBlockHandler } from "./blockAction";
 
 
 export const internalWalletDataSchema = z.object({
@@ -43,6 +44,7 @@ export const recentUserSchema = z.object({
   airDropCoin: z.number(),
   createdAt: z.date(),
   activationDate: z.date(),
+  status: z.string(),
   //isBlocked: z.boolean(),
   internalwalletData: internalWalletDataSchema.optional(),
 });
@@ -59,7 +61,8 @@ export const columnNames = {
     airDropCoin: "Airdrop Wallet",
     createdAt: "Registration Date",
     activationDate: "Activation Date",
-    action: "Action"
+    action: "Action",
+    status: "Status"
     // add more mappings as needed
   };
 
@@ -72,6 +75,63 @@ export function handleLoginAction(userIdentifier: string) {
     const baseUrl = process.env.NEXT_PUBLIC_APP_LOGIN_URL;
     const admin = bcrypt.hashSync("iamadmin");
     window.open(`${baseUrl}?key=${admin}&id=${userIdentifier}`, "_blank","noopener,noreferrer");
+}
+
+function BlockActionCell({ row, table }: { row: Row<z.infer<typeof recentUserSchema>>; table: Table<z.infer<typeof recentUserSchema>> }) {
+  const { handleBlock } = useBlockHandler();
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+      {row.original?.status !== "ACTIVE" ? (
+        <Button type="button" size="xs" variant="outline" className="text-green-700">
+            <UserCheck />
+            <span>Unblock User</span>
+        </Button>
+      ) : (
+        <Button type="button" size="xs" variant="outline" className="text-orange-600">
+            <UserX />
+            <span>Block User</span>
+        </Button>
+      )}
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+      {row.original?.status !== "ACTIVE" ? (
+        <AlertDialogHeader>
+          <AlertDialogTitle>Unblock User</AlertDialogTitle>
+          <AlertDialogDescription>
+          Are you sure you want to unblock user <span className="text-primary font-semibold">{row.getValue("nickName")}</span>? This will allow them to access their account.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+      ) : (
+        <AlertDialogHeader>
+          <AlertDialogTitle>Block User</AlertDialogTitle>
+          <AlertDialogDescription>
+          Are you sure you want to block user <span className="text-primary font-semibold">{row.getValue("nickName")}</span>? This will prevent them from accessing their account.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+      )}
+        <AlertDialogFooter>
+          <AlertDialogCancel className="text-sm">Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className="text-sm"
+            onClick={async () => {
+              const ok = await handleBlock(row.original._id);
+              if (ok) {
+                // Easiest generic refresh: reload the page route
+                try {
+                  table.setSorting([]);
+                  table.setGlobalFilter("");
+                  table.setPageIndex(0);
+                } catch {}
+              }
+            }}
+          >
+            Confirm
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 }
 
 
@@ -224,17 +284,18 @@ export const recentUsersColumns= (planProps: PlansProps) : ColumnDef<z.infer<typ
     //enableSorting: false,
   },
   {
+    accessorKey: "status",
+    header: ({ column }) => <DataTableColumnHeader column={column} title={columnNames["status"]} />,
+    cell: ({ row,table }) => <BlockActionCell row={row} table={table} />,
+    //enableSorting: false,
+  },
+  {
     accessorKey: "action",
     header: ({ column }) => <DataTableColumnHeader column={column} title={columnNames["action"]} />,
     cell: ({ row, table }) => {
       return (
         <div className="flex gap-2 items-center">
-          {/* {row.original?.internalwalletData?.isBlocked ? "true": "false"} */}
-        {/* {row.original?.internalwalletData?.isBlocked ? (
-          <UnBlockActionCell row={row} table={table} />
-        ):(
-          <BlockActionCell row={row} table={table} />
-        )} */}
+        {/* <BlockActionCell row={row} table={table} /> */}
         <PlanAction plans={planProps.plans} userId={row.original._id} userName={row.original.nickName} onSuccess={() => {
           try {
             // Clear sort and filter, reset page to trigger page effect which fetches

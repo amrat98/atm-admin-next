@@ -5,7 +5,7 @@ import { DataTable } from "@/components/data-table/data-table"
 import { DataTablePagination } from "@/components/data-table/data-table-pagination"
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options"
 import { useDataTableInstance } from "@/hooks/use-data-table-instance"
-import { Download, RefreshCcw } from "lucide-react"
+import { Download, RefreshCcw, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TableSkeleton } from "@/components/ui/loader"
 import { Input } from "@/components/ui/input"
@@ -203,12 +203,15 @@ export default function PoolUsers() {
                 <CardHeader>
                 {/* <CardTitle>Search</CardTitle>
                 <CardDescription>Track and manage your latest leads and their status.</CardDescription> */}
+                <div className="relative max-w-sm">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                     placeholder="Filter table..."
                     value={table.getState().globalFilter ?? ""}
                     onChange={e => table.setGlobalFilter(e.target.value)}
-                    className="max-w-sm text-sm h-10"
+                    className="text-sm h-10 pl-10"
                     />
+                </div>
 
                 <CardAction>
                     <div className="flex items-center gap-2">

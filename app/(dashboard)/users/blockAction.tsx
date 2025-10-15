@@ -8,29 +8,30 @@ export function useBlockHandler() {
   const { token, setToken } = useUser();
   const router = useRouter();
 
-  const handleBlock = async (userId: string, status: boolean): Promise<boolean> => {
+  const handleBlock = async (userId: number): Promise<boolean> => {
     if (!userId || !token) return false;
     try {
-      const response = await axios.post(
+      const response = await axios.put(
         apiConfig.blockUsers,
-        { userId, status },
+        { _id: userId },
         { headers: { token } }
       );
-      console.log(response);
-      toast.success("User Blocked successful!");
+      //console.log(response);
+      toast.success(response.data.responseMessage || "User is Block/Unblock Successfully!");
       return true;
     } catch (error: unknown) {
-      let errorMessage = "Failed to burn coins";
+      let errorMessage = "Failed to Block/Unblock user";
       if (
         axios.isAxiosError(error) &&
         error.response?.data?.responseMessage
       ) {
         errorMessage = error.response.data.responseMessage;
       }
-      toast.error(errorMessage);
       if (errorMessage === "jwt expired") {
         setToken("");
         router.push("/login");
+      }else{
+        toast.error(errorMessage);
       }
       return false;
     }
