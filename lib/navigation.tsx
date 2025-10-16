@@ -6,6 +6,8 @@ import {
     TrendingUp,
     Flame,
     type LucideIcon,
+    BookUser,
+    BookA,
   } from "lucide-react"
   
   export interface NavSubItem {
@@ -67,7 +69,25 @@ import {
           title: "Burning Coins",
           url: "/burning",
           icon: Flame,
-        },
+        }
       ],
     },
+    {
+      id: 2,
+      label: "Sections",
+      items: [
+        {
+          title: "Blogs",
+          url: "/blogs",
+          icon: BookA,
+          comingSoon: true,
+        },
+        {
+          title: "Teams",
+          url: "/teams",
+          icon: BookUser,
+          comingSoon: true,
+        },
+      ]
+    }
   ];

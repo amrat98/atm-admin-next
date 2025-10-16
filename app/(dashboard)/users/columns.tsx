@@ -1,6 +1,6 @@
 
 import { ColumnDef, Row, Table } from "@tanstack/react-table";
-import { Copy, UserX,UserCheck, LogIn } from "lucide-react";
+import { Copy, UserX,UserCheck, LogIn, Wallet } from "lucide-react";
 import z from "zod";
 
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
@@ -25,6 +25,7 @@ import bcrypt from "bcryptjs"
 import { PlanAction } from "./planAction"
 import type { Plan } from "./planAction"
 import { useBlockHandler } from "./blockAction";
+import { useBlockWalletHandler } from "./blockWalletAction";
 
 
 export const internalWalletDataSchema = z.object({
@@ -62,6 +63,7 @@ export const columnNames = {
     createdAt: "Registration Date",
     activationDate: "Activation Date",
     action: "Action",
+    withdraw: "Withdraw",
     status: "Status"
     // add more mappings as needed
   };
@@ -116,6 +118,63 @@ function BlockActionCell({ row, table }: { row: Row<z.infer<typeof recentUserSch
             className="text-sm"
             onClick={async () => {
               const ok = await handleBlock(row.original._id);
+              if (ok) {
+                // Easiest generic refresh: reload the page route
+                try {
+                  table.setSorting([]);
+                  table.setGlobalFilter("");
+                  table.setPageIndex(0);
+                } catch {}
+              }
+            }}
+          >
+            Confirm
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
+function BlockWalletActionCell({ row, table }: { row: Row<z.infer<typeof recentUserSchema>>; table: Table<z.infer<typeof recentUserSchema>> }) {
+  const { handleBlockWallet } = useBlockWalletHandler();
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+      {row.original?.internalwalletData?.isBlocked ? (
+        <Button type="button" size="xs" variant="outline" className="text-green-700">
+            <Wallet />
+            <span>Unblock Wallet</span>
+        </Button>
+      ) : (
+        <Button type="button" size="xs" variant="outline" className="text-orange-600">
+            <Wallet />
+            <span>Block Wallet</span>
+        </Button>
+      )}
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+      {row.original?.internalwalletData?.isBlocked ? (
+        <AlertDialogHeader>
+          <AlertDialogTitle>Unblock Wallet</AlertDialogTitle>
+          <AlertDialogDescription>
+          Are you sure you want to unblock the wallet for <span className="text-primary font-semibold">{row.getValue("nickName")}</span>?This will allow wallet transactions.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+      ) : (
+        <AlertDialogHeader>
+          <AlertDialogTitle>Block Wallet</AlertDialogTitle>
+          <AlertDialogDescription>
+          Are you sure you want to block the wallet for <span className="text-primary font-semibold">{row.getValue("nickName")}</span>? This will prevent wallet transactions.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+      )}
+        <AlertDialogFooter>
+          <AlertDialogCancel className="text-sm">Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className="text-sm"
+            onClick={async () => {
+              const ok = await handleBlockWallet(row.original._id,row.original?.internalwalletData?.isBlocked ? false: true);
               if (ok) {
                 // Easiest generic refresh: reload the page route
                 try {
@@ -281,6 +340,12 @@ export const recentUsersColumns= (planProps: PlansProps) : ColumnDef<z.infer<typ
     accessorKey: "createdAt",
     header: ({ column }) => <DataTableColumnHeader column={column} title={columnNames["createdAt"]} />,
     cell: ({ row }) => <span>{format(new Date(row.getValue("createdAt")), 'dd/MM/yy | HH:mm a')}</span>,
+    //enableSorting: false,
+  },
+  {
+    accessorKey: "withdraw",
+    header: ({ column }) => <DataTableColumnHeader column={column} title={columnNames["withdraw"]} />,
+    cell: ({ row,table }) => <BlockWalletActionCell row={row} table={table} />,
     //enableSorting: false,
   },
   {

@@ -6,6 +6,7 @@ export const apiConfig = {
     otpResend: baseUrl + "admin/forgotPasswordSendOTP",
     getUsers: baseUrl + "admin/listUser",
     blockUsers: baseUrl + "admin/blockUnblockUser",
+    blockWallets: baseUrl + "admin/block-unblock-withdraw",
     listPoolUser: baseUrl + "admin/listPoolUser",
     transactionList: baseUrl + "admin/assetsTransactionList",
     availableBurn: baseUrl + "admin/available-to-burn",
@@ -15,4 +16,16 @@ export const apiConfig = {
     getSubscription: baseUrl + "admin/viewUserSubscriptionDetails",
     buyPlanUsers: baseUrl + "buy/get-plan-for-users",
     getPlans: baseUrl + "buy/getTradingBotDetails",
+    blogs: {
+        add: baseUrl + "admin/add-blog",
+        get: baseUrl + "admin/get-blogs",
+        update: baseUrl + "admin/edit-blog",
+        delete: baseUrl + "admin/delete-blog",
+    },
+    teams: {
+        add: baseUrl + "admin/add-team",
+        get: baseUrl + "admin/get-team",
+        update: baseUrl + "admin/edit-team",
+        delete: baseUrl + "admin/delete-team",
+    }
 }
