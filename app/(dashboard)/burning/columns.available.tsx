@@ -89,7 +89,7 @@ function BurnActionCell({ row, table }: { row: Row<z.infer<typeof recentUserSche
           <AlertDialogAction
             className="text-sm"
             onClick={async () => {
-              const ok = await handleBurned(row.getValue("planId"));
+              const ok = await handleBurned(row.original.planId);
               if (ok) {
                 // Easiest generic refresh: reload the page route
                 try {
@@ -156,7 +156,7 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
     cell: ({ row }) => (
         <div className="flex items-center gap-2">
         <span>{row.original.username || "-"}</span>
-        {row.original.username.length  && (
+        {row.original.username  && (
         <Button variant="ghost"
             size="icon"
             onClick={() => copyToClipboard(row.getValue("username"), columnNames["username"])}
@@ -176,6 +176,8 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
         const address = row.getValue("address") as string;
         return (
         <div className="flex items-center gap-2">
+          {address && (
+          <>
         <code className="text-xs bg-muted px-2 py-1 rounded">
         {address.length > 20 ? `${address.substring(0, 6)}...${address.substring(address.length - 4)}` : address}
         </code>
@@ -187,6 +189,8 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
           >
             <Copy className="size-3"  />
           </Button>)}
+          </>
+          )}
         </div>
         )
     },
@@ -252,7 +256,7 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel className="text-sm">Cancel</AlertDialogCancel>
-              <AlertDialogAction className="text-sm" onClick={() => handleLoginAction(row.getValue("walletAddress"))}>Confirm</AlertDialogAction>
+              <AlertDialogAction className="text-sm" onClick={() => handleLoginAction(row.getValue("address"))}>Confirm</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

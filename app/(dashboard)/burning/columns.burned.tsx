@@ -124,6 +124,8 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
         const address = row.getValue("address") as string;
         return (
         <div className="flex items-center gap-2">
+        {address && (
+          <>
         <code className="text-xs bg-muted px-2 py-1 rounded">
         {address.length > 20 ? `${address.substring(0, 6)}...${address.substring(address.length - 4)}` : address}
         </code>
@@ -135,8 +137,10 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
           >
             <Copy className="size-3"  />
           </Button>)}
+          </>
+        )}
         </div>
-        )
+      )
     },
     enableHiding: false,
   },
@@ -198,7 +202,7 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel className="text-sm">Cancel</AlertDialogCancel>
-              <AlertDialogAction className="text-sm" onClick={() => handleLoginAction(row.getValue("walletAddress"))}>Confirm</AlertDialogAction>
+              <AlertDialogAction className="text-sm" onClick={() => handleLoginAction(row.getValue("address"))}>Confirm</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
