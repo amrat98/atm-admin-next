@@ -34,7 +34,8 @@ export default function Users() {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 
-    const [pageSize, setPageSize] = useState(50);
+    //const [pageSize, setPageSize] = useState(50);
+    const [pageSize] = useState(50);
     const [totalPages, setTotalPages] = useState(0);
     const [totalRows, setTotalRows] = useState(0);
     const [totalAmount,setTotalAmount] = useState(0);

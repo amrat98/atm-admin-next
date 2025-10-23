@@ -1,6 +1,6 @@
 
 import { ColumnDef, Row, Table } from "@tanstack/react-table";
-import { Copy, UserX,UserCheck, LogIn, Wallet } from "lucide-react";
+import { Copy, UserX,UserCheck, LogIn, Wallet, ShoppingBag } from "lucide-react";
 import z from "zod";
 
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
@@ -361,6 +361,8 @@ export const recentUsersColumns= (planProps: PlansProps) : ColumnDef<z.infer<typ
       return (
         <div className="flex gap-2 items-center">
         {/* <BlockActionCell row={row} table={table} /> */}
+        {row.original?.status === "ACTIVE" ? (
+          <>
         <PlanAction plans={planProps.plans} userId={row.original._id} userName={row.original.nickName} onSuccess={() => {
           try {
             // Clear sort and filter, reset page to trigger page effect which fetches
@@ -397,6 +399,18 @@ export const recentUsersColumns= (planProps: PlansProps) : ColumnDef<z.infer<typ
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+        </>
+        ) : (
+          <>
+          <Button type="button" size="xs" variant="default" className="bg-blue-600" disabled>
+            <ShoppingBag />
+            <span>Plan Purchase</span>
+          </Button>
+          <Button size="iconxs" variant="default" className="bg-green-600" disabled>
+            <LogIn />
+          </Button>
+          </>
+        )}
         </div>
       );
     },

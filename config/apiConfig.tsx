@@ -16,6 +16,8 @@ export const apiConfig = {
     getSubscription: baseUrl + "admin/viewUserSubscriptionDetails",
     buyPlanUsers: baseUrl + "buy/get-plan-for-users",
     getPlans: baseUrl + "buy/getTradingBotDetails",
+    getAirdropUsers: baseUrl + "airdrop/admin-get-airdrop-users",
+    updatedAirdropReward: baseUrl + "airdrop/admin-update-reward",
     blogs: {
         add: baseUrl + "admin/add-blog",
         get: baseUrl + "admin/get-blogs",

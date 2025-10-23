@@ -8,6 +8,7 @@ import {
     type LucideIcon,
     BookUser,
     BookA,
+    Gift,
   } from "lucide-react"
   
   export interface NavSubItem {
@@ -56,6 +57,11 @@ import {
           icon: Network,
         },
         {
+          title: "Airdrop Campaign",
+          url: "/airdrop",
+          icon: Gift,
+        },
+        {
           title: "Transactions",
           url: "/transactions",
           icon: Gauge,
@@ -80,13 +86,11 @@ import {
           title: "Blogs",
           url: "/blogs",
           icon: BookA,
-          comingSoon: true,
         },
         {
           title: "Teams",
           url: "/teams",
           icon: BookUser,
-          comingSoon: true,
         },
       ]
     }

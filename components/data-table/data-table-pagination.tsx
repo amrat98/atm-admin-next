@@ -20,7 +20,7 @@ function range(start: number, end: number): number[] {
 }
 
 export function DataTablePagination<TData>({ table, totalPagesCount }: DataTablePaginationProps<TData>) {
-  const [gotoInputVisible, setGotoInputVisible] = useState(false);
+  // const [gotoInputVisible, setGotoInputVisible] = useState(false);
   const [gotoPage, setGotoPage] = useState("");
 
   const totalPages = totalPagesCount ?? table.getPageCount();
@@ -50,7 +50,7 @@ export function DataTablePagination<TData>({ table, totalPagesCount }: DataTable
   const submitGotoPage = () => {
     const pageNum = Math.min(Math.max(Number(gotoPage), 1), totalPages);
     table.setPageIndex(pageNum - 1);
-    setGotoInputVisible(false);
+    // setGotoInputVisible(false);
     setGotoPage("");
   };
 
