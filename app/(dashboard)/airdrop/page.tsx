@@ -27,8 +27,9 @@ type UserExcelRow = {
     walletAddress: string;
     followFacebook: string;
     followInsta: string;
-    followTelegram: string;
+    // followTelegram: string;
     followTgCommunity: string;
+    followX: string;
     rewardStatus?: string;
     taskStatus?: boolean;
     adminRemark?: string;
@@ -136,8 +137,9 @@ export default function AirdropUsers() {
                     "Wallet Address": r.walletAddress || "-",
                     "Facebook": r.followFacebook || "-",
                     "Instagram": r.followInsta || "-",
-                    "Telegram": r.followTelegram || "-",
+                    // "Telegram": r.followTelegram || "-",
                     "Community": r.followTgCommunity || "-",
+                    "X": r.followX || "-",
                     "Reward": r.rewardStatus || "-",
                     "Status": r.taskStatus || "-",
                     "Remark": r.adminRemark || "-",

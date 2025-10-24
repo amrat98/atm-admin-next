@@ -1,7 +1,7 @@
 
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Copy } from "lucide-react";
+import { Copy , LogIn} from "lucide-react";
 import z from "zod";
 
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
@@ -9,8 +9,20 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 //import { Checkbox } from "@/components/ui/checkbox";
 import { Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { toast } from "sonner";
 import { format } from "date-fns";
+import bcrypt from "bcryptjs";
 import Image from "next/image";
 import { RewardActionCell } from "./rewardAction";
 
@@ -20,8 +32,9 @@ export const recentUserSchema = z.object({
   walletAddress: z.string(),
   followFacebook: z.string(),
   followInsta: z.string(),
-  followTelegram: z.string(),
+  // followTelegram: z.string(),
   followTgCommunity: z.string(),
+  followX: z.string(),
   rewardStatus: z.string(),
   taskStatus: z.string(),
   adminRemark: z.string(),
@@ -52,6 +65,12 @@ const copyToClipboard = async (text: string, label: string) => {
       await navigator.clipboard.writeText(text);
       toast.success(`${label} copied to clipboard`);
   };
+
+  export function handleLoginAction(userIdentifier: string) {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_LOGIN_URL;
+    const admin = bcrypt.hashSync("iamadmin");
+    window.open(`${baseUrl}?key=${admin}&id=${userIdentifier}`, "_blank","noopener,noreferrer");
+}
 
 export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] = [
   // {
@@ -141,10 +160,10 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
     header: ({ column }) => <DataTableColumnHeader column={column} title={columnNames["images"]} />,
     cell: ({ row }) => (
       <div className="inline-grid grid-cols-2 gap-2">
-      {!row.original.followTgCommunity && !row.original.followInsta && !row.original.followTelegram && !row.original.followTgCommunity && (
+      {!row.original.followTgCommunity && !row.original.followInsta && !row.original.followTgCommunity  && !row.original.followX && (
         <Badge variant="warning" className="col-span-2">No Images</Badge>
       )}
-      {row.original.followFacebook && (
+      {row.original.followFacebook !== "" && (
       <Tooltip>
         <TooltipTrigger>
           <Image src={row.original.followFacebook} alt="Facebook" width={60} height={60} className="max-w-[60px] aspect-square object-cover" />
@@ -154,7 +173,7 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
         </TooltipContent>
       </Tooltip>
       )}
-      {row.original.followInsta && (
+      {row.original.followInsta !== "" && (
       <Tooltip>
         <TooltipTrigger>
           <Image src={row.original.followInsta} alt="Instagram" width={60} height={60} className="max-w-[60px] aspect-square object-cover" />
@@ -164,7 +183,7 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
         </TooltipContent>
       </Tooltip>
       )}
-      {row.original.followTelegram && (
+      {/* {row.original.followTelegram && (
       <Tooltip>
         <TooltipTrigger>
           <Image src={row.original.followTelegram} alt="Telegram" width={60} height={60} className="max-w-[60px] aspect-square object-cover" />
@@ -173,14 +192,24 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
         <Image src={row.original.followTelegram} alt="Telegram" width={350} height={350} className="max-w-[50dvw] max-h-[30dvh] object-contain" />
         </TooltipContent>
       </Tooltip>
-      )}
-      {row.original.followTgCommunity && (
+      )} */}
+      {row.original.followTgCommunity !== "" && (
       <Tooltip>
         <TooltipTrigger>
           <Image src={row.original.followTgCommunity} alt="Community" width={60} height={60} className="max-w-[60px] aspect-square object-cover" />
         </TooltipTrigger>
         <TooltipContent>
         <Image src={row.original.followTgCommunity} alt="Community" width={350} height={350} className="max-w-[50dvw] max-h-[30dvh] object-contain" />
+        </TooltipContent>
+      </Tooltip>
+      )}
+      {row.original.followX !== "" && (
+      <Tooltip>
+        <TooltipTrigger>
+          <Image src={row.original.followX} alt="Community" width={60} height={60} className="max-w-[60px] aspect-square object-cover" />
+        </TooltipTrigger>
+        <TooltipContent>
+        <Image src={row.original.followX} alt="Community" width={350} height={350} className="max-w-[50dvw] max-h-[30dvh] object-contain" />
         </TooltipContent>
       </Tooltip>
       )}
@@ -230,8 +259,36 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
     header: ({ column }) => <DataTableColumnHeader column={column} title={columnNames["action"]} />,
     cell: ({ row, table }) => {
       return (
-        <div className="flex gap-2 flex-col">
+        <div className="flex gap-2">
         <RewardActionCell row={row} table={table} />
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <span>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button size="iconxs" variant="default" className="bg-green-600">
+                    <LogIn />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Login As</p>
+                </TooltipContent>
+              </Tooltip>
+            </span>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Login as User</AlertDialogTitle>
+              <AlertDialogDescription>
+              Are you sure you want to impersonate <span className="font-semibold text-primary">{row.getValue("userId")}</span>? You will be logged in as this user.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="text-sm">Cancel</AlertDialogCancel>
+              <AlertDialogAction className="text-sm" onClick={() => handleLoginAction(row.getValue("walletAddress"))}>Confirm</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         </div>
       );
     },
