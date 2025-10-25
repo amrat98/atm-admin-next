@@ -7,6 +7,9 @@ export const config = {
     "/pool-users",
     "/transactions",
     "/investments",
+    "/airdrop",
+    "/blogs",
+    "/teams",
     "/burning",
     "/login",
     "/otp",
@@ -15,14 +18,15 @@ export const config = {
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const token = req.cookies.get("token");
+  const token = req.cookies.get("token")?.value;
 
   // Define which routes are public (login/otp)
-  const publicPaths = ["/login", "/otp"];
+  const publicPaths = ["/login", "/otp", "/"];
 
   // If user is not authenticated and tries to access protected routes
   if (!token && !publicPaths.includes(pathname)) {
     return NextResponse.redirect(new URL("/login", req.url));
+
   }
 
   // Redirect authenticated users away from public pages (login, otp)

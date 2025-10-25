@@ -16,14 +16,14 @@ import { NavMain } from "@/components/layout/nav-items"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useUser } from "@/lib/userContext"
-import { useRouter } from "next/navigation"
+// import { useRouter } from "next/navigation"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { setToken } = useUser();
-    const router = useRouter();
+    // const router = useRouter();
     const handleLogout = () => {
         setToken("")
-        router.push("/login");
+        //router.push("/login");
       };
 
   return (

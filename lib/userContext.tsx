@@ -17,9 +17,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   // On mount, sync state from cookie
   useEffect(() => {
-    const cookieToken = getCookie('token') as string | undefined
+    // const cookieToken = getCookie('token') as string | undefined
     const sessionToken = sessionStorage.getItem('token');
-    setTokenState(cookieToken ?? sessionToken ?? null);
+    //setTokenState(cookieToken ?? sessionToken ?? null);
+    setTokenState(sessionToken ?? null);
   }, [])
 
   // Utility for setting token (login/logout actions)

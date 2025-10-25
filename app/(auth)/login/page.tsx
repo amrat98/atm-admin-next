@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -39,8 +39,8 @@ export default function LoginPage() {
             const response = await axios.post(apiConfig.login, formData);
             const successMessage = response.data?.responseMessage || "Login successful";
             toast.success(successMessage);
-            router.push("/otp");
             sessionStorage.setItem("email", formData.email);
+            router.push("/otp");
         } catch (error: unknown) {
             let errorMessage = "Login failed"
             if (axios.isAxiosError(error) && error.response?.data?.responseMessage) {
@@ -51,6 +51,13 @@ export default function LoginPage() {
             setSubmitting(false);
         }
     };
+
+    useEffect(() => {
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("email");
+        sessionStorage.removeItem("type");
+        sessionStorage.removeItem("userType");
+      }, []);
 
   return (
     <div className="min-h-screen flex flex-col gap-10 items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">

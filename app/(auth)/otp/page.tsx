@@ -73,7 +73,7 @@ export default function OTPPage() {
             sessionStorage.setItem("userType", response.data?.result?.userType);
 
             // Save token using context setToken and sessionStorage
-            sessionStorage.setItem("token", response.data?.result?.token);
+            //sessionStorage.setItem("token", response.data?.result?.token);
             setToken(response.data?.result?.token);
 
             toast.success(successMessage);

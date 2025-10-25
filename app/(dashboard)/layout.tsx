@@ -18,7 +18,7 @@ export default function DashboardLayout({
 }) {
   const {setToken} = useUser();
   const handleLogout = () => {
-    setToken("")
+    setToken("");
   };
   return (
     <>
