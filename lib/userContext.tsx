@@ -1,6 +1,6 @@
 "use client"
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { getCookie, setCookie, deleteCookie } from 'cookies-next'
+import {  setCookie, deleteCookie } from 'cookies-next' //getCookie,
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 

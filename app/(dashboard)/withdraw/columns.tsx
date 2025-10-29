@@ -2,7 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Copy } from "lucide-react";
 import z from "zod";
-import type { Table } from '@tanstack/react-table';
+// import type { Table } from '@tanstack/react-table';
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -52,14 +52,14 @@ const copyToClipboard = async (text: string, label: string) => {
       toast.success(`${label} copied to clipboard`);
   };
 
-  const transactionTypeBadge: Record<string, { label: string; variant: "info" | "success" | "warning" | "danger" | "secondary" | "default" | "destructive" }> = {
-    "WITHDRAW": { label: "Withdraw", variant: "warning" },
-    "PLAN PURCHASE": { label: "Plan Purchase", variant: "success" },
-    "DEPOSIT": { label: "Deposit", variant: "info" },
-    "CREDIT": { label: "Credit", variant: "success" },
-    "TRANSFER": { label: "Transfer", variant: "default" },
-    "DEBIT": { label: "Debit", variant: "danger" }
-  };
+  // const transactionTypeBadge: Record<string, { label: string; variant: "info" | "success" | "warning" | "danger" | "secondary" | "default" | "destructive" }> = {
+  //   "WITHDRAW": { label: "Withdraw", variant: "warning" },
+  //   "PLAN PURCHASE": { label: "Plan Purchase", variant: "success" },
+  //   "DEPOSIT": { label: "Deposit", variant: "info" },
+  //   "CREDIT": { label: "Credit", variant: "success" },
+  //   "TRANSFER": { label: "Transfer", variant: "default" },
+  //   "DEBIT": { label: "Debit", variant: "danger" }
+  // };
   const transactionStatusBadge: Record<string, { label: string; variant: "info" | "success" | "warning" | "danger" | "secondary" | "default" | "destructive" }> = {
     "WAITING_APPROVAL": { label: "Waiting", variant: "warning" },
     "COMPLETED": { label: "Completed", variant: "success" },
