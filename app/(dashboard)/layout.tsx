@@ -1,5 +1,6 @@
 "use client"
 import { cn } from "@/lib/utils"
+import { useEffect } from "react"
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
@@ -9,17 +10,25 @@ import { AppSidebar } from "@/components/layout/sidebar"
 import { metaConfig } from "@/config/metaConfig"
 import { LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({children,}: { children: React.ReactNode;}) {
   const {setToken} = useUser();
+  const router = useRouter();
   const handleLogout = () => {
     setToken("");
   };
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const sessionToken = sessionStorage.getItem("token");
+      sessionStorage.removeItem("email");
+      if (!sessionToken) {
+        router.push("/login");
+        setToken("");
+      }
+  }
+  });
   return (
     <>
     <SidebarProvider defaultOpen>

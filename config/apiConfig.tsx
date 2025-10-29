@@ -18,6 +18,8 @@ export const apiConfig = {
     getPlans: baseUrl + "buy/getTradingBotDetails",
     getAirdropUsers: baseUrl + "airdrop/admin-get-airdrop-users",
     updatedAirdropReward: baseUrl + "airdrop/admin-update-reward",
+    getWithdrawList: baseUrl + "admin/asste-transaction-withdraw-list",
+    actionWithdraw: baseUrl + "admin/approveWithdrawReq",
     blogs: {
         add: baseUrl + "admin/add-blog",
         get: baseUrl + "admin/get-blogs",

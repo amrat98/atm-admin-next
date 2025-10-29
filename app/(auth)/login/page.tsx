@@ -14,6 +14,7 @@ import { Loader2, Shield, Eye, EyeOff } from "lucide-react"
 import { metaConfig } from "@/config/metaConfig"
 import { apiConfig } from "@/config/apiConfig"
 import { useRouter } from "next/navigation"
+import { deleteCookie } from 'cookies-next'
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -53,6 +54,7 @@ export default function LoginPage() {
     };
 
     useEffect(() => {
+        deleteCookie("token");
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("email");
         sessionStorage.removeItem("type");

@@ -9,6 +9,7 @@ import {
     BookUser,
     BookA,
     Gift,
+    BanknoteArrowDown,
   } from "lucide-react"
   
   export interface NavSubItem {
@@ -65,6 +66,12 @@ import {
           title: "Transactions",
           url: "/transactions",
           icon: Gauge,
+        },
+        {
+          title: "Withdraw",
+          url: "/withdraw",
+          icon: BanknoteArrowDown,
+          isNew: true
         },
         {
           title: "Investment History",

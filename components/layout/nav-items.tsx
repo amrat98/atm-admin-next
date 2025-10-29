@@ -33,6 +33,9 @@ interface NavMainProps {
 const IsComingSoon = () => (
   <span className="ml-auto rounded-md bg-gray-200 px-2 py-1 text-xs dark:text-gray-800">Soon</span>
 );
+const IsNew = () => (
+  <span className="ml-auto rounded-md bg-red-200 px-2 py-1 text-xs text-red-800">New</span>
+);
 
 const NavItemExpanded = ({
   item,
@@ -56,6 +59,7 @@ const NavItemExpanded = ({
               {item.icon && <item.icon />}
               <span>{item.title}</span>
               {item.comingSoon && <IsComingSoon />}
+              {item.isNew && <IsNew />}
               <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
             </SidebarMenuButton>
           ) : (
@@ -69,6 +73,7 @@ const NavItemExpanded = ({
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
                 {item.comingSoon && <IsComingSoon />}
+                {item.isNew && <IsNew />}
               </Link>
             </SidebarMenuButton>
           )}
@@ -83,6 +88,7 @@ const NavItemExpanded = ({
                       {subItem.icon && <subItem.icon />}
                       <span>{subItem.title}</span>
                       {subItem.comingSoon && <IsComingSoon />}
+                      {item.isNew && <IsNew />}
                     </Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
@@ -130,6 +136,7 @@ const NavItemCollapsed = ({
                   {subItem.icon && <subItem.icon className="[&>svg]:text-sidebar-foreground" />}
                   <span>{subItem.title}</span>
                   {subItem.comingSoon && <IsComingSoon />}
+                  {item.isNew && <IsNew />}
                 </Link>
               </SidebarMenuSubButton>
             </DropdownMenuItem>

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
   totalPagesCount?: number;
+  showSelectedRow?: boolean;
 }
 
 const DOTS = "...";
@@ -19,7 +20,7 @@ function range(start: number, end: number): number[] {
   return Array.from({ length: end - start + 1 }, (_, i) => i + start);
 }
 
-export function DataTablePagination<TData>({ table, totalPagesCount }: DataTablePaginationProps<TData>) {
+export function DataTablePagination<TData>({ table, totalPagesCount, showSelectedRow }: DataTablePaginationProps<TData>) {
   // const [gotoInputVisible, setGotoInputVisible] = useState(false);
   const [gotoPage, setGotoPage] = useState("");
 
@@ -56,9 +57,11 @@ export function DataTablePagination<TData>({ table, totalPagesCount }: DataTable
 
   return (
     <div className="flex items-center justify-end lg:px-4 flex-wrap">
-      {/* <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
+      {showSelectedRow && (
+      <div className="text-muted-foreground flex-1 text-sm flex">
         {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div> */}
+      </div>
+      )}
       <div className="flex w-full items-center justify-end gap-4 lg:w-fit flex-wrap">
         <div className="hidden items-center gap-2 lg:flex">
           <Label htmlFor="rows-per-page" className="text-sm font-medium">

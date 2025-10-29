@@ -25,6 +25,7 @@ export default function OTPPage() {
     const { setToken } = useUser();
     const [email, setEmail] = useState<string | null>(null);
     const [submitting, setSubmitting] = useState(false);
+    const [resendSubmitting, setResendSubmitting] = useState(false);
     const [timeLeft, setTimeLeft] = useState(60);
     const [canResend, setCanResend] = useState(false);
 
@@ -33,7 +34,7 @@ export default function OTPPage() {
             const email = sessionStorage.getItem("email");
             setEmail(email);
             if (!email) {
-            router.push("/login");
+                router.push("/login");
             }
         }
         // Start countdown timer
@@ -76,8 +77,12 @@ export default function OTPPage() {
             //sessionStorage.setItem("token", response.data?.result?.token);
             setToken(response.data?.result?.token);
 
-            toast.success(successMessage);
-            router.push("/dashboard");
+            const sessionToken = sessionStorage.getItem("token");
+
+            if(sessionToken){
+                router.push("/dashboard");
+                toast.success(successMessage);
+            }
 
         } catch (error: unknown) {
             let errorMessage = "OTP failed"
@@ -93,19 +98,19 @@ export default function OTPPage() {
     const handleResendOTP = async () => {
         setTimeLeft(60);
         setCanResend(false);
-        setSubmitting(true);
+        setResendSubmitting(true);
         // setError("");
         // setOtp("");
         try {
             const response = await axios.post(apiConfig.otpResend, {email: email});
-            const successMessage = response.data?.responseMessage || "Login successful";
-            sessionStorage.setItem("email", response.data?.result?.email);
-            sessionStorage.setItem("type", response.data?.result?.type);
-            sessionStorage.setItem("userType", response.data?.result?.userType);
+            const successMessage = response.data?.responseMessage || "OTP send successfully.";
+            // sessionStorage.setItem("email", response.data?.result?.email);
+            // sessionStorage.setItem("type", response.data?.result?.type);
+            // sessionStorage.setItem("userType", response.data?.result?.userType);
 
-            // Save token using context setToken and sessionStorage
-            sessionStorage.setItem("token", response.data?.result?.token);
-            setToken(response.data?.result?.token);
+            // // Save token using context setToken and sessionStorage
+            // sessionStorage.setItem("token", response.data?.result?.token);
+            // setToken(response.data?.result?.token);
             toast.success(successMessage);
 ///            router.push("/dashboard");
 
@@ -119,7 +124,7 @@ export default function OTPPage() {
             // }
             toast.error(errorMessage);
         } finally {
-            setSubmitting(false);
+            setResendSubmitting(false);
             // Restart timer
             const timer = setInterval(() => {
               setTimeLeft((prev) => {
@@ -188,8 +193,8 @@ export default function OTPPage() {
                     <span>Resend in {formatTime(timeLeft)}</span>
                 </div>
                 ) : (
-                <Button type="button" variant="outline" size="lg" className="w-full" onClick={handleResendOTP}>
-                    {submitting && <Loader2 className="size-5 animate-spin" />}
+                <Button type="button" variant="outline" size="lg" className="w-full" onClick={handleResendOTP} disabled={resendSubmitting}>
+                    {resendSubmitting && <Loader2 className="size-5 animate-spin" />}
                     Resend OTP
                 </Button>
                 )}

@@ -57,7 +57,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-green-600",
       bgColor: "bg-green-100 dark:bg-green-900/20",
       change: "+5 from yesterday",
-      onClick: () => onCardClick("/users", { filter: "new24h" }),
+      //onClick: () => onCardClick("/users", { filter: "new24h" }),
+      onClick: () => onCardClick("/users"),
     },
     {
       title: "Total Coins Staked",
@@ -66,7 +67,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-purple-600",
       bgColor: "bg-purple-100 dark:bg-purple-900/20",
       change: "+20.1% from last month",
-      onClick: () => onCardClick("/transactions", { type: "STAKE" }),
+      //onClick: () => onCardClick("/transactions", { type: "STAKE" }),
+      onClick: () => onCardClick("/transactions"),
     },
     {
       title: "New Coins Staked (24h)",
@@ -75,7 +77,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-emerald-600",
       bgColor: "bg-emerald-100 dark:bg-emerald-900/20",
       change: "+8.2% from yesterday",
-      onClick: () => onCardClick("/transactions", { type: "STAKE", period: "24h" }),
+      //onClick: () => onCardClick("/transactions", { type: "STAKE", period: "24h" }),
+      onClick: () => onCardClick("/transactions"),
     },
     {
       title: "Total Income Wallet",
@@ -84,7 +87,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-indigo-600",
       bgColor: "bg-indigo-100 dark:bg-indigo-900/20",
       change: "+15.8% from last month",
-      onClick: () => onCardClick("/users", { highlight: "income" }),
+      //onClick: () => onCardClick("/users", { highlight: "income" }),
+      onClick: () => onCardClick("/users"),
     },
     {
       title: "Total Pool Wallet",
@@ -93,7 +97,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-cyan-600",
       bgColor: "bg-cyan-100 dark:bg-cyan-900/20",
       change: "+10.3% from last month",
-      onClick: () => onCardClick("/users", { highlight: "pool" }),
+      //onClick: () => onCardClick("/users", { highlight: "pool" }),
+      onClick: () => onCardClick("/pool-users"),
     },
     {
       title: "Total Airdrop Wallet",
@@ -102,7 +107,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-pink-600",
       bgColor: "bg-pink-100 dark:bg-pink-900/20",
       change: "+25.7% from last month",
-      onClick: () => onCardClick("/users", { highlight: "airdrop" }),
+      //onClick: () => onCardClick("/users", { highlight: "airdrop" }),
+      onClick: () => onCardClick("/airdrop"),
     },
     {
       title: "Total Fund Wallet",
@@ -111,7 +117,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-orange-600",
       bgColor: "bg-orange-100 dark:bg-orange-900/20",
       change: "+18.4% from last month",
-      onClick: () => onCardClick("/users", { highlight: "fund" }),
+      //onClick: () => onCardClick("/users", { highlight: "fund" }),
+      onClick: () => onCardClick("/users"),
     },
     {
       title: "Blocked Users",
@@ -120,7 +127,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-red-600",
       bgColor: "bg-red-100 dark:bg-red-900/20",
       change: "-2 from last week",
-      onClick: () => onCardClick("/users", { userStatus: "blocked" }),
+      //onClick: () => onCardClick("/users", { userStatus: "blocked" }),
+      onClick: () => onCardClick("/users"),
     },
     {
       title: "Total Coins Burned",
@@ -138,7 +146,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-red-600",
       bgColor: "bg-red-100 dark:bg-red-900/20",
       change: "Today's burns",
-      onClick: () => onCardClick("/burning", { period: "today" }),
+      //onClick: () => onCardClick("/burning", { period: "today" }),
+      onClick: () => onCardClick("/burning"),
     },
     {
       title: "Total IDs in Pool",
@@ -156,7 +165,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-violet-600",
       bgColor: "bg-violet-100 dark:bg-violet-900/20",
       change: "+12.1% from last month",
-      onClick: () => onCardClick("/transactions", { type: "WITHDRAWAL" }),
+      //onClick: () => onCardClick("/transactions", { type: "WITHDRAWAL" }),
+      onClick: () => onCardClick("/withdraw"),
     },
     {
       title: "Withdrawals Today",
@@ -165,7 +175,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-purple-600",
       bgColor: "bg-purple-100 dark:bg-purple-900/20",
       change: "Today's withdrawals",
-      onClick: () => onCardClick("/transactions", { type: "WITHDRAWAL", period: "24h" }),
+      //onClick: () => onCardClick("/transactions", { type: "WITHDRAWAL", period: "24h" }),
+      onClick: () => onCardClick("/withdraw"),
     },
     {
       title: "Total P2P Transfers",
@@ -174,7 +185,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-amber-600",
       bgColor: "bg-amber-100 dark:bg-amber-900/20",
       change: "+9.8% from last month",
-      onClick: () => onCardClick("/transactions", { type: "TRANSFER" }),
+      //onClick: () => onCardClick("/transactions", { type: "TRANSFER" }),
+      onClick: () => onCardClick("/transactions"),
     },
     {
       title: "P2P Transfers Today",
@@ -183,7 +195,8 @@ export function StatsCards({ data, onCardClick }: StatsCardsProps) {
       color: "text-yellow-600",
       bgColor: "bg-yellow-100 dark:bg-yellow-900/20",
       change: "Today's transfers",
-      onClick: () => onCardClick("/transactions", { type: "TRANSFER", period: "24h" }),
+      //onClick: () => onCardClick("/transactions", { type: "TRANSFER", period: "24h" }),
+      onClick: () => onCardClick("/transactions"),
     },
   ];
 

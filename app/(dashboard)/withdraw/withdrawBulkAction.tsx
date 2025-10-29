@@ -1,0 +1,147 @@
+"use client";
+import { useUser } from "@/lib/userContext";
+import axios from "axios";
+import { apiConfig } from "@/config/apiConfig";
+import { toast } from "sonner";
+import z from "zod";
+import { Check, X } from "lucide-react";
+import { Table } from "@tanstack/react-table";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+
+export const recentUserSchema = z.object({
+  _id: z.string(),
+  userName: z.string(),
+  userId: z.string(),
+  transactionId: z.string(),
+  transacionType: z.string(),
+  formWalletAddress: z.string(),
+  toWalletAddress: z.string(),
+  transacionStatus: z.string(),
+  remark: z.string(),
+  amount: z.number(),
+  walletBalance: z.number(),
+  transactionFee: z.number(),
+  createdAt: z.date(),
+});
+
+export function WithdrawBulkAction({table}: { table: Table<z.infer<typeof recentUserSchema>>;}){
+  const { token } = useUser();
+  const selectedRows = table.getSelectedRowModel().rows;
+  const userIDs = selectedRows.map(row => row.original._id);
+  const userAmounts = selectedRows.map(row => row.original.amount);
+  const totalAmount = userAmounts.reduce((sum, amount) => sum + amount, 0);
+//  console.log('Bulk Action userIDs:', userIDs);
+
+  const handleBulkAction = async (action: string) => {
+    try {
+      const headers = { token: token };
+      const data = {
+        objectId: userIDs,
+        action: action
+      }
+      const response = await axios.post(apiConfig.actionWithdraw, data, { headers });
+      //toast.success(response.data.responseMessage || "Withdraw Approved/Rejected successfully.");
+      if (action === 'REJECT') {
+        toast.success('Withdraw is rejected.');
+      } else if (action === 'APPROVE') {
+        toast.success('Withdraw approved successfully.');
+      } else {
+        // Fallback message for other actions
+        toast.success(response.data.responseMessage || 'Action completed successfully.');
+      }
+      return true;
+    } catch (error: unknown) {
+      let errorMessage = "Failed to Approve/Reject Withdraw.";
+      if (axios.isAxiosError(error) && error.response?.data?.responseMessage) {
+        errorMessage = error.response.data.responseMessage;
+      }
+      toast.error(errorMessage);
+      return false;
+    }
+  };
+
+  return (
+    <>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+          <Button type="button" size="xs" variant="outline" className="text-green-700">
+            <Check className="w-4 h-4 mr-1" />
+            <span>Bulk Approve</span>
+          </Button>
+      </AlertDialogTrigger>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Bulk Approve Transaction
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to approve all transaction for this users?<br/><br/>
+            <span className="font-semibold text-red-600">Total Transaction: $ {totalAmount}</span>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel className="text-sm">Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className="text-sm"
+            onClick={async () => {
+              const ok = await handleBulkAction("APPROVE");
+              if (ok) {
+                try {
+                  table.setSorting([]);
+                  table.setGlobalFilter("");
+                  table.setPageIndex(0);
+                  table.toggleAllPageRowsSelected(false);
+                } catch {}
+              }
+            }}
+          >
+            Confirm
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+
+    <AlertDialog>
+    <AlertDialogTrigger asChild>
+    <Button type="button" size="xs" variant="outline" className="text-orange-700">
+      <X className="w-4 h-4 mr-1" />
+      <span>Bulk Reject</span>
+    </Button>
+    </AlertDialogTrigger>
+
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>
+          Bulk Reject Transaction
+        </AlertDialogTitle>
+        <AlertDialogDescription>
+          Are you sure you want to reject all transaction for this user?<br/><br/>
+          <span className="font-semibold text-red-600">Total Transaction: $ {totalAmount}</span>
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel className="text-sm">Cancel</AlertDialogCancel>
+        <AlertDialogAction
+          className="text-sm"
+          onClick={async () => {
+            const ok = await handleBulkAction("REJECT");
+            if (ok) {
+              try {
+                table.setSorting([]);
+                table.setGlobalFilter("");
+                table.setPageIndex(0);
+                table.toggleAllPageRowsSelected(false);
+              } catch {}
+            }
+          }}
+        >
+          Confirm
+        </AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+    </AlertDialog>
+    </>
+  );
+}
