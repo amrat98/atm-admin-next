@@ -1,10 +1,11 @@
 "use client";
+import { useState } from "react";
 import { useUser } from "@/lib/userContext";
 import axios from "axios";
 import { apiConfig } from "@/config/apiConfig";
 import { toast } from "sonner";
 import z from "zod";
-import { Check, X } from "lucide-react";
+import { Check, Loader2, X } from "lucide-react";
 import { Table } from "@tanstack/react-table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ export const recentUserSchema = z.object({
 
 export function WithdrawBulkAction({table}: { table: Table<z.infer<typeof recentUserSchema>>;}){
   const { token } = useUser();
+  const [submitting, setSubmitting] = useState(false);
   const selectedRows = table.getSelectedRowModel().rows;
   const userIDs = selectedRows.map(row => row.original._id);
   const userAmounts = selectedRows.map(row => row.original.amount);
@@ -34,6 +36,7 @@ export function WithdrawBulkAction({table}: { table: Table<z.infer<typeof recent
 //  console.log('Bulk Action userIDs:', userIDs);
 
   const handleBulkAction = async (action: string) => {
+    setSubmitting(true);
     try {
       const headers = { token: token };
       const data = {
@@ -58,6 +61,8 @@ export function WithdrawBulkAction({table}: { table: Table<z.infer<typeof recent
       }
       toast.error(errorMessage);
       return false;
+    } finally {
+      setSubmitting(false)
     }
   };
 
@@ -82,9 +87,10 @@ export function WithdrawBulkAction({table}: { table: Table<z.infer<typeof recent
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="text-sm">Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="text-sm" disabled={submitting}>Cancel</AlertDialogCancel>
           <AlertDialogAction
             className="text-sm"
+            disabled={submitting}
             onClick={async () => {
               const ok = await handleBulkAction("APPROVE");
               if (ok) {
@@ -97,7 +103,8 @@ export function WithdrawBulkAction({table}: { table: Table<z.infer<typeof recent
               }
             }}
           >
-            Confirm
+            {submitting && <Loader2 className="size-5 animate-spin" />}
+            <span>Confirm</span>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -122,9 +129,10 @@ export function WithdrawBulkAction({table}: { table: Table<z.infer<typeof recent
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel className="text-sm">Cancel</AlertDialogCancel>
+        <AlertDialogCancel className="text-sm" disabled={submitting}>Cancel</AlertDialogCancel>
         <AlertDialogAction
           className="text-sm"
+          disabled={submitting}
           onClick={async () => {
             const ok = await handleBulkAction("REJECT");
             if (ok) {
@@ -137,7 +145,8 @@ export function WithdrawBulkAction({table}: { table: Table<z.infer<typeof recent
             }
           }}
         >
-          Confirm
+          {submitting && <Loader2 className="size-5 animate-spin" />}
+          <span>Confirm</span>
         </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
