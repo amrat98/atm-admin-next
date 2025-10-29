@@ -215,13 +215,21 @@ export const recentUsersColumns: ColumnDef<z.infer<typeof recentUserSchema>>[] =
   {
     accessorKey: "amount",
     header: ({ column }) => <DataTableColumnHeader column={column} title={columnNames["amount"]} />,
-    cell: ({ row }) => <span>$ {row.original.amount.toLocaleString()}</span>,
+    cell: ({ row }) => (
+      <div className={row.original.amount >= 1000 ? "bg-red-300": "bg-green-300"}>
+        <span className="block py-2 -my-2 text-center font-semibold">$ {row.original.amount.toLocaleString()}</span>
+      </div>
+    ),
     //enableSorting: false,
   },
   {
     accessorKey: "walletBalance",
     header: ({ column }) => <DataTableColumnHeader column={column} title={columnNames["walletBalance"]} />,
-    cell: ({ row }) => <span>$ {row.original.walletBalance.toLocaleString()}</span>,
+    cell: ({ row }) => (
+      <div className={row.original.walletBalance >= 1000 ? "bg-red-300": "bg-green-300"}>
+        <span className="block py-2 -my-2 text-center font-semibold">$ {row.original.walletBalance.toLocaleString()}</span>
+      </div>
+    ),
     //enableSorting: false,
   },
   {
