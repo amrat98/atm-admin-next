@@ -67,7 +67,7 @@ export function WithdrawAction({row,table}: { row: Row<z.infer<typeof recentUser
     <>
     <AlertDialog>
       <AlertDialogTrigger asChild>
-          <Button type="button" size="xs" variant="outline" className="text-green-700">
+          <Button type="button" size="xs" variant="outline" className="text-green-700" disabled={submitting}>
             <Check className="w-4 h-4 mr-1" />
             <span>Approve</span>
           </Button>
@@ -109,7 +109,7 @@ export function WithdrawAction({row,table}: { row: Row<z.infer<typeof recentUser
 
     <AlertDialog>
     <AlertDialogTrigger asChild>
-    <Button type="button" size="xs" variant="outline" className="text-orange-700">
+    <Button type="button" size="xs" variant="outline" className="text-orange-700" disabled={submitting}>
       <X className="w-4 h-4 mr-1" />
       <span>Reject</span>
     </Button>

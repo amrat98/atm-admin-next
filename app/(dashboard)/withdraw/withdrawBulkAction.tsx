@@ -70,7 +70,7 @@ export function WithdrawBulkAction({table}: { table: Table<z.infer<typeof recent
     <>
     <AlertDialog>
       <AlertDialogTrigger asChild>
-          <Button type="button" size="xs" variant="outline" className="text-green-700">
+          <Button type="button" size="xs" variant="outline" className="text-green-700" disabled={submitting}>
             <Check className="w-4 h-4 mr-1" />
             <span>Bulk Approve</span>
           </Button>
@@ -112,7 +112,7 @@ export function WithdrawBulkAction({table}: { table: Table<z.infer<typeof recent
 
     <AlertDialog>
     <AlertDialogTrigger asChild>
-    <Button type="button" size="xs" variant="outline" className="text-orange-700">
+    <Button type="button" size="xs" variant="outline" className="text-orange-700" disabled={submitting}>
       <X className="w-4 h-4 mr-1" />
       <span>Bulk Reject</span>
     </Button>
